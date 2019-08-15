@@ -1,9 +1,9 @@
 package com.demo.myapplication;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +11,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.demo.myapplication.adapter.AdapterBannerComponentA;
 import com.demo.myapplication.banner.indicator.BannerComponent;
 import com.demo.myapplication.banner.indicator.Indicator;
-import com.demo.myapplication.banner.indicator.IndicatorViewPager;
+import com.demo.myapplication.banner.indicator.IndicatorViewPager.IndicatorViewPagerAdapter;
 import com.demo.myapplication.banner.indicator.slidebar.ColorBar;
 import com.demo.myapplication.banner.indicator.slidebar.ScrollBar;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     @Inject
     A a;
-
+    private String[] url = {"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3190441126,995644236&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3985721766,1358716390&fm=26&gp=0.jpg",
+            "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2211997936,2194621113&fm=26&gp=0.jpg",
+            "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1802563968,897623865&fm=26&gp=0.jpg"};
+    private AdapterBannerComponentA abc;
     private BannerComponent bannerComponent;
 
     //！！！使用非绘制的指示器
@@ -42,7 +47,8 @@ public class MainActivity extends AppCompatActivity{
         bannerComponent = new BannerComponent(indicator, viewPager, false);
         //！！！使用非绘制的指示器
         inflate = LayoutInflater.from(getApplicationContext());
-        bannerComponent.setAdapter(adapter);
+        abc = new AdapterBannerComponentA(this, url);
+        bannerComponent.setAdapter(abc.getAdapter());
 
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         //默认就是800毫秒，设置单页滑动效果的时间
-//        bannerComponent.setScrollDuration(800);
+        bannerComponent.setScrollDuration(1000);
         //设置播放间隔时间，默认情况是3000毫秒
         bannerComponent.setAutoPlayTime(2500);
 //        switchString();
@@ -126,7 +132,7 @@ public class MainActivity extends AppCompatActivity{
 
     private int[] images = {R.drawable.p1, R.drawable.p2, R.drawable.p3, R.drawable.p4};
 
-    private IndicatorViewPager.IndicatorViewPagerAdapter adapter = new IndicatorViewPager.IndicatorViewPagerAdapter() {
+    private IndicatorViewPagerAdapter adapter = new IndicatorViewPagerAdapter() {
 
         @Override
         public View getViewForTab(int position, View convertView, ViewGroup container) {
